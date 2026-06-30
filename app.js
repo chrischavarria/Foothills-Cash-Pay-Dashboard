@@ -368,8 +368,7 @@ function cardMarkup(product) {
       <div class="tag-row">${product.dosageForms.map((form) => `<span class="tag">${form}</span>`).join("")}</div>
       <div class="price-row">${renderPriceBoxes(product)}</div>
       <div class="card-actions">
-        <button class="primary-button" type="button" data-detail="${product.id}">View details</button>
-        <button class="secondary-button" type="button" data-calc="${product.id}">Calculate</button>
+        <button class="primary-button" type="button" data-detail="${product.id}">View pricing &amp; details</button>
       </div>
     </article>
   `;
