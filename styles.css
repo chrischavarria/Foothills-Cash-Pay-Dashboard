@@ -418,7 +418,7 @@ legend {
   border-radius: 16px;
   padding: 20px;
   box-shadow: 0 12px 30px rgba(52, 52, 52, 0.045);
-  animation: fhUp 0.22s ease both;
+  animation: fhUp 0.22s ease backwards;
   transition:
     transform 0.16s ease,
     box-shadow 0.16s ease,
