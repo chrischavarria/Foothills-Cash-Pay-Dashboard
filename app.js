@@ -223,6 +223,39 @@ function money(value, plus = false) {
   return `$${Number(value).toFixed(2)}${plus ? "+" : ""}`;
 }
 
+function parseDollarAmount(value) {
+  if (!value) return null;
+  const parsed = Number(String(value).replace(/[^0-9.]/g, ""));
+  return Number.isFinite(parsed) ? parsed : null;
+}
+
+function matrixCalculatorPoints(product) {
+  if (product.id !== "mens-product-specific" || !product.priceMatrix) return [];
+  const quantityColumns = product.priceMatrix.columns.slice(2);
+
+  return product.priceMatrix.rows.flatMap((row) => {
+    const [productGroup, strengths, ...prices] = row;
+    return prices
+      .map((price, index) => {
+        const medicationPrice = parseDollarAmount(price);
+        if (medicationPrice === null) return null;
+        const quantity = quantityColumns[index];
+        return {
+          quantity,
+          unit: "CT / GM",
+          medicationPrice,
+          label: `${productGroup} (${strengths}) - ${quantity} CT / GM`,
+        };
+      })
+      .filter(Boolean);
+  });
+}
+
+function calculatorPoints(product) {
+  const matrixPoints = matrixCalculatorPoints(product);
+  return matrixPoints.length ? matrixPoints : product.pricePoints || [];
+}
+
 function shippedTotal(pricePoint) {
   if (!pricePoint || pricePoint.medicationPrice === undefined) return null;
   const shipping = state.shippingMethod === "ship" ? DEFAULT_SHIPPING : 0;
@@ -230,9 +263,10 @@ function shippedTotal(pricePoint) {
 }
 
 function startingPoint(product) {
-  const direct = product.pricePoints?.find((point) => point.medicationPrice !== undefined);
+  const points = calculatorPoints(product);
+  const direct = points.find((point) => point.medicationPrice !== undefined);
   if (direct) return direct;
-  const unit = product.pricePoints?.find((point) => point.unitPrice !== undefined);
+  const unit = points.find((point) => point.unitPrice !== undefined);
   if (unit) return { ...unit, medicationPrice: unit.unitPrice * 30 };
   return null;
 }
@@ -422,12 +456,13 @@ function renderPriceRows(product) {
 }
 
 function renderCalculator(product) {
-  const options = product.pricePoints
-    ?.map((point, index) => {
+  const points = calculatorPoints(product);
+  const options = points
+    .map((point, index) => {
       const base = point.medicationPrice ?? point.unitPrice ?? 0;
       const label = point.unitPrice
         ? `${point.quantity} - ${money(point.unitPrice)} each`
-        : `${point.quantity} ${point.unit} - ${money(point.medicationPrice, point.plusFlag)}`;
+        : point.label || `${point.quantity} ${point.unit} - ${money(point.medicationPrice, point.plusFlag)}`;
       return `<option value="${index}" data-base="${base}" data-unit="${point.unitPrice ? "1" : "0"}">${label}</option>`;
     })
     .join("");
@@ -456,7 +491,8 @@ function updateDialogCalculator(product) {
   const select = document.querySelector("#calcPricePoint");
   const quantity = document.querySelector("#calcQuantity");
   if (!select || !quantity) return;
-  const point = product.pricePoints[Number(select.value)];
+  const points = calculatorPoints(product);
+  const point = points[Number(select.value)];
   const isUnit = point.unitPrice !== undefined;
   quantity.disabled = !isUnit;
   const med = isUnit ? point.unitPrice * Number(quantity.value || 0) : point.medicationPrice;
