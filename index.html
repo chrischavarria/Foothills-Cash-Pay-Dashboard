@@ -1,0 +1,153 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Foothills Cash-Pay Catalog</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="brand-block">
+        <img class="brand-mark" src="assets/logo-mark.png" alt="" />
+        <img class="brand-wordmark" src="assets/logo-wordmark.png" alt="Foothills Professional Pharmacy" />
+      </div>
+      <div class="header-actions">
+        <label class="search-box">
+          <span class="search-icon" aria-hidden="true">⌕</span>
+          <input id="searchInput" type="search" placeholder="Product, strength, ingredient..." />
+        </label>
+      </div>
+    </header>
+
+    <main>
+      <section class="catalog-hero">
+        <p class="eyebrow">Cash-Pay Catalog</p>
+        <h1>Compounded Products &amp; Pricing</h1>
+        <p>
+          Browse current cash-pay pricing by category, dosage form, and strength.
+          Medication prices are shown before shipping.
+        </p>
+      </section>
+
+      <section class="summary-band" aria-label="Catalog summary">
+        <article>
+          <span id="metricCategories">0</span>
+          <p>Categories</p>
+        </article>
+        <article>
+          <span id="metricProducts">0</span>
+          <p>Product groups</p>
+        </article>
+        <article>
+          <span id="metricReview">0</span>
+          <p>Review-required groups</p>
+        </article>
+        <article>
+          <span>$9.36</span>
+          <p>Default shipping</p>
+        </article>
+      </section>
+
+      <section class="notice-band">
+        <strong>Medication prices are shown before shipping.</strong>
+        Shipped patient totals add the default $9.36 shipping charge. Pickup removes shipping.
+      </section>
+
+      <div class="workspace">
+        <aside class="filter-panel" aria-label="Catalog filters">
+          <div class="panel-heading">
+            <h2>Filter</h2>
+            <button id="resetFilters" class="ghost-button" type="button">Reset</button>
+          </div>
+
+          <label>
+            Category
+            <select id="categoryFilter"></select>
+          </label>
+
+          <label>
+            Dosage form
+            <select id="formFilter"></select>
+          </label>
+
+          <label>
+            Pricing type
+            <select id="pricingFilter"></select>
+          </label>
+
+          <label>
+            Review status
+            <select id="reviewFilter">
+              <option value="all">All</option>
+              <option value="standard">Standard quote</option>
+              <option value="review">Review required</option>
+            </select>
+          </label>
+
+          <fieldset>
+            <legend>Shipping</legend>
+            <label class="radio-line">
+              <input type="radio" name="shippingMethod" value="ship" checked />
+              Shipped
+            </label>
+            <label class="radio-line">
+              <input type="radio" name="shippingMethod" value="pickup" />
+              Pickup
+            </label>
+          </fieldset>
+        </aside>
+
+        <section class="catalog-area" aria-live="polite">
+          <div class="catalog-toolbar">
+            <div>
+              <p class="eyebrow">Catalog</p>
+              <h2 id="resultCount">0 product groups</h2>
+            </div>
+            <div class="view-toggle" role="group" aria-label="View mode">
+              <button id="cardViewButton" class="active" type="button">Cards</button>
+              <button id="tableViewButton" type="button">Table</button>
+            </div>
+          </div>
+
+          <div id="productGrid" class="product-grid"></div>
+          <div id="productTableWrap" class="table-wrap hidden">
+            <table>
+              <thead>
+                <tr>
+                  <th>Product group</th>
+                  <th>Category</th>
+                  <th>Dosage forms</th>
+                  <th>Pricing</th>
+                  <th>Starting med-only</th>
+                  <th>Shipped total</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody id="productTable"></tbody>
+            </table>
+          </div>
+          <div id="emptyState" class="empty-state hidden">
+            No catalog items match the selected filters.
+          </div>
+        </section>
+      </div>
+    </main>
+
+    <dialog id="detailDialog">
+      <div class="dialog-header">
+        <div>
+          <p id="dialogCategory" class="eyebrow"></p>
+          <h2 id="dialogTitle"></h2>
+        </div>
+        <button id="closeDialog" class="icon-button" type="button" aria-label="Close">×</button>
+      </div>
+      <div id="dialogBody"></div>
+    </dialog>
+
+    <script src="app.js"></script>
+  </body>
+</html>
