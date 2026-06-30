@@ -66,6 +66,28 @@ select {
   color: var(--muted-light);
 }
 
+@keyframes fhUp {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes fhFade {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
 .site-header {
   position: sticky;
   top: 0;
@@ -396,6 +418,45 @@ legend {
   border-radius: 16px;
   padding: 20px;
   box-shadow: 0 12px 30px rgba(52, 52, 52, 0.045);
+  animation: fhUp 0.22s ease both;
+  transition:
+    transform 0.16s ease,
+    box-shadow 0.16s ease,
+    border-color 0.16s ease;
+}
+
+.product-card:hover {
+  border-color: #ded6ca;
+  box-shadow: 0 18px 38px rgba(52, 52, 52, 0.11);
+  transform: translateY(-3px);
+}
+
+.product-card:nth-child(2) {
+  animation-delay: 0.025s;
+}
+
+.product-card:nth-child(3) {
+  animation-delay: 0.05s;
+}
+
+.product-card:nth-child(4) {
+  animation-delay: 0.075s;
+}
+
+.product-card:nth-child(5) {
+  animation-delay: 0.1s;
+}
+
+.product-card:nth-child(6) {
+  animation-delay: 0.125s;
+}
+
+.product-card:nth-child(7) {
+  animation-delay: 0.15s;
+}
+
+.product-card:nth-child(8) {
+  animation-delay: 0.175s;
 }
 
 .product-card header {
@@ -485,12 +546,24 @@ legend {
   border: 1px solid var(--green);
   background: var(--green);
   color: white;
+  transition: background 0.15s ease, border-color 0.15s ease;
+}
+
+.primary-button:hover {
+  border-color: var(--green-dark);
+  background: var(--green-dark);
 }
 
 .secondary-button {
   border: 1px solid var(--line);
   background: white;
   color: var(--ink);
+  transition: border-color 0.15s ease, background 0.15s ease;
+}
+
+.secondary-button:hover {
+  border-color: #d6cec2;
+  background: var(--surface-soft);
 }
 
 .table-wrap {
@@ -553,10 +626,12 @@ dialog {
   border-radius: 18px;
   padding: 0;
   box-shadow: 0 28px 70px rgba(52, 52, 52, 0.2);
+  animation: fhUp 0.22s ease;
 }
 
 dialog::backdrop {
   background: rgba(34, 38, 34, 0.42);
+  animation: fhFade 0.15s ease;
 }
 
 .dialog-header {
@@ -657,6 +732,17 @@ dialog::backdrop {
 .calc-output div:last-child strong {
   color: var(--green-dark);
   font-size: 1.3rem;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+    transition-duration: 0.001ms !important;
+  }
 }
 
 @media (max-width: 940px) {
