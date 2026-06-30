@@ -553,6 +553,14 @@ function bindEvents() {
     const detailButton = event.target.closest("[data-detail], [data-calc]");
     if (detailButton) openDetail(detailButton.dataset.detail || detailButton.dataset.calc);
   });
+  els.productGrid.addEventListener("mouseover", (event) => {
+    const card = event.target.closest(".product-card");
+    if (card) card.classList.add("is-hovered");
+  });
+  els.productGrid.addEventListener("mouseout", (event) => {
+    const card = event.target.closest(".product-card");
+    if (card && !card.contains(event.relatedTarget)) card.classList.remove("is-hovered");
+  });
   els.closeDialog.addEventListener("click", () => els.dialog.close());
 }
 
